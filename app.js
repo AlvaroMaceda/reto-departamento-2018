@@ -1,12 +1,12 @@
 var secuencia = [
-  {item:'blue',salida='red'},
-  {item:'blue',salida='red'},
-  {item:'blue',salida='red'},
-  {item:'blue',salida='red'},
-  {item:'blue',salida='red'},
-  {item:'blue',salida='red'},
-  {item:'blue',salida='red'},
-]
+  {item:'blue',salida:['red','blue','yellow']},
+  {item:'blue',salida:'red'},
+  {item:'blue',salida:'red'},
+  {item:'blue',salida:'red'},
+  {item:'blue',salida:'red'},
+  {item:'blue',salida:'red'},
+  {item:'blue',salida:'red'},
+];
 
 var estado = new Estado(secuencia)
   .alIterar(ponerEstadoPantalla)
