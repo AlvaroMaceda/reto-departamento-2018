@@ -1,22 +1,26 @@
 function Estado(){
+    this._alIterar = null;
+    this._alGanar = null;
+    this._alPerder = null;
 }
 
 // Hints for static code analysis
 Estado.prototype.alIterar = null;
 Estado.prototype.alPerder = null;
 Estado.prototype.alGanar = null;
-Estado.prototype.next = function (codigo) {
-    this.alIterar && this.alIterar();
+Estado.prototype.next = function() {
+    this._alIterar && this._alIterar();
 };
 
 (function generateChainProperties() {
     ['alIterar', 'alPerder', 'alGanar'].map(function (propertyName) {
         Estado.prototype[propertyName] = function (callback) {
-            this[propertyName] = callback;
+            this['_'+propertyName] = callback;
             return this;
         };
     })
 })();
+
 
 
 
@@ -33,9 +37,9 @@ EstadoNormal.prototype.codigoEsperado = function() {
 
 EstadoNormal.prototype.next = function (codigo) {
     if(codigo === this.codigoEsperado()) {
+        this._alIterar && this._alIterar(this.secuencia[this.indice].salida);
         this.indice++;
-        this.alIterar && this.alIterar();
-        if(this.indice >= this.secuencia.length) this.alGanar && this.alGanar();
+        if(this.indice >= this.secuencia.length) this._alGanar && this._alGanar();
         return this;
     } else {
         console.log('fail');

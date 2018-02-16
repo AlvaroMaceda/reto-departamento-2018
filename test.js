@@ -1,4 +1,5 @@
 var testName;
+function xit() {}
 function it(name,test) {
     testName = name;
     test();
@@ -32,6 +33,15 @@ window.onload = function() {
     });
 
     it("Devuelve el estado de salida",function(){
+        var e = new EstadoNormal(secuencia);
+        e.alIterar(function(estado){
+            assert(estado === secuencia[0].salida);
+        });
+        e.next('blue');
+        e.alIterar(function(estado){
+            assert(estado === secuencia[1].salida);
+        });
+        e.next('red');
     });
 
     it("Marca ganador al llegar al final de la secuencia",function(){
