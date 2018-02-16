@@ -1,0 +1,32 @@
+#clave {
+  width: 200px;
+  height: 50px;
+  background-color: black;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#buton-container {
+  display: flex;
+  margin-bottom: 1em;
+}
+.boton {
+  width: 100px;
+  height: 100px;
+}
+#red {
+  background-color: red;
+}
+#blue {
+  background-color: blue;
+}
+#magenta {
+  background-color: magenta;
+}
+#green {
+  background-color: lime;
+}
+#yellow {
+  background-color: gold;
+}
