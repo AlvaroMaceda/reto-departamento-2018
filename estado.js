@@ -8,12 +8,13 @@ function Estado(){
 Estado.prototype.alIterar = null;
 Estado.prototype.alPerder = null;
 Estado.prototype.alGanar = null;
+
 Estado.prototype.next = function() {
     this._alIterar && this._alIterar();
 };
 
 (function generateChainProperties() {
-    ['alIterar', 'alPerder', 'alGanar'].map(function (propertyName) {
+    ['alIterar', 'alPerder', 'alGanar'].forEach(function (propertyName) {
         Estado.prototype[propertyName] = function (callback) {
             this['_'+propertyName] = callback;
             return this;
@@ -31,26 +32,37 @@ function EstadoNormal(secuencia) {
 EstadoNormal.prototype = Object.create(Estado.prototype);
 EstadoNormal.prototype.constructor = EstadoNormal;
 
-EstadoNormal.prototype.codigoEsperado = function() {
-    return this.secuencia[this.indice].item;
-};
-
 EstadoNormal.prototype.next = function (codigo) {
-    if(codigo === this.codigoEsperado()) {
+    var me = this;
+
+    function elCodigoEsCorrecto(codigo) {
+        return codigo === me.secuencia[me.indice].item;
+    }
+    function haGanado() {
+        return me.indice >= me.secuencia.length
+    }
+
+    if(elCodigoEsCorrecto(codigo)) {
         this._alIterar && this._alIterar(this.secuencia[this.indice].salida);
         this.indice++;
-        if(this.indice >= this.secuencia.length) this._alGanar && this._alGanar();
+        if(haGanado()) this._alGanar && this._alGanar();
         return this;
     } else {
-        console.log('fail');
-        return new EstadoErroneo();
+        var estadoErroneo = new EstadoErroneo().alPerder(this._alPerder);
+        estadoErroneo.next();
+        return estadoErroneo;
     }
 };
 
 
 
-
+// var randomNumberBetween0and19 = Math.floor(Math.random() * 20);
 function EstadoErroneo(){
 }
 EstadoErroneo.prototype = Object.create(Estado.prototype);
 EstadoErroneo.prototype.constructor = EstadoErroneo;
+
+EstadoErroneo.prototype.next = function(){
+    this._alPerder && this._alPerder();
+};
+
