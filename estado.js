@@ -11,6 +11,7 @@ Estado.prototype.alGanar = null;
 
 Estado.prototype.next = function() {
     this._alIterar && this._alIterar();
+    return this;
 };
 
 (function generateChainProperties() {
@@ -64,5 +65,6 @@ EstadoErroneo.prototype.constructor = EstadoErroneo;
 
 EstadoErroneo.prototype.next = function(){
     this._alPerder && this._alPerder();
+    return this;
 };
 
