@@ -15,12 +15,20 @@ var estado = new EstadoNormal(secuencia)
 
 function instalarManejadores() {
     document.querySelectorAll('.boton').forEach(function(boton){
-        boton.addEventListener("click", function(event){ clickBoton(event)});
+        boton.addEventListener("click", function(event){
+            estado = estado.next(event.target.dataset.color)
+        });
     });
 }
 
 function ponerEstadoPantalla(estado) {
     console.log('iterar:'+estado);
+    var i=0;
+    document.querySelectorAll('[id^=estado-]').forEach(function(item){
+        console.log(item);
+        console.log(estado[i]);
+        item.style['background-color'] = estado[i++];
+    });
 }
 function ponerPantallaEnEstadoGanador() {
     console.log('ganar');
@@ -29,10 +37,6 @@ function ponerPantallaEnEstadoPerdedor() {
     console.log('perder');
 }
 
-function clickBoton(event) {
-    console.log(event.target.dataset.color);
-    estado = estado.next(event.target.dataset.color) ;
-}
 
 window.onload = function() {
     instalarManejadores();
