@@ -28,15 +28,15 @@ Estado.prototype.alGanar = null;
 // Esto debería estar en otro fichero
 //-----------------------------------------------------------------------
 
-function EstadoNormal(secuencia,estadoErroneoAPasarCuandoSePierde) {
+function EstadoCorrecto(secuencia, estadoErroneoAPasarCuandoSePierde) {
     this._indice = 0;
     this._secuencia = secuencia;
     this._estadoAlPerder = estadoErroneoAPasarCuandoSePierde;
 }
-EstadoNormal.prototype = Object.create(Estado.prototype);
-EstadoNormal.prototype.constructor = EstadoNormal;
+EstadoCorrecto.prototype = Object.create(Estado.prototype);
+EstadoCorrecto.prototype.constructor = EstadoCorrecto;
 
-EstadoNormal.prototype.next = function (codigo) {
+EstadoCorrecto.prototype.next = function (codigo) {
     var me = this;
 
     function elCodigoEsCorrecto(codigo) {
@@ -90,8 +90,9 @@ EstadoNormal.prototype.next = function (codigo) {
 //-----------------------------------------------------------------------
 
 function EstadoPerdedor(min, max, generadorEstados){
-    this._clicksHastaPerder = Math.floor(Math.random() * this.max) + min;
+    this._clicksHastaPerder = Math.floor(Math.random() * max) + min;
     this._clicks = 0;
+    this._generadorEstados = generadorEstados;
 }
 EstadoPerdedor.prototype = Object.create(Estado.prototype);
 EstadoPerdedor.prototype.constructor = EstadoPerdedor;
@@ -99,10 +100,16 @@ EstadoPerdedor.prototype.constructor = EstadoPerdedor;
 EstadoPerdedor.prototype.next = function(){
     var me = this;
 
+    function llamarCallbackIterar(){
+        var estado = me._generadorEstados && me._generadorEstados() || undefined;
+        me._alIterar && me._alIterar(estado);
+    }
+
     function hayQueLanzarPerder() {
         return me._clicks >= me._clicksHastaPerder;
     }
 
+    llamarCallbackIterar();
     this._clicks++;
     if(hayQueLanzarPerder()) this._alPerder && this._alPerder();
     return this;

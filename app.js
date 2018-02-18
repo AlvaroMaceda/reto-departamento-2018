@@ -20,7 +20,7 @@ function coloresAleatorios() {
 
 var estadoErroneo  = new EstadoPerdedor();
 
-var estado = new EstadoNormal(secuencia)
+var estado = new EstadoCorrecto(secuencia)
     .alIterar(ponerEstadoPantalla)
     .alGanar(ponerPantallaEnEstadoGanador)
     .alPerder(ponerPantallaEnEstadoPerdedor);
