@@ -18,6 +18,8 @@ function coloresAleatorios() {
     return [colores.randomElement(),colores.randomElement(),colores.randomElement()];
 }
 
+var estadoErroneo  = new EstadoPerdedor();
+
 var estado = new EstadoNormal(secuencia)
     .alIterar(ponerEstadoPantalla)
     .alGanar(ponerPantallaEnEstadoGanador)

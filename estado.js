@@ -4,16 +4,17 @@ function Estado(){
     this._alPerder = null;
 }
 
-// Hints for static code analysis
-Estado.prototype.alIterar = null;
-Estado.prototype.alPerder = null;
-Estado.prototype.alGanar = null;
-
 Estado.prototype.next = function() {
     this._alIterar && this._alIterar();
     return this;
 };
 
+// Hints para el IDE
+Estado.prototype.alIterar = null;
+Estado.prototype.alPerder = null;
+Estado.prototype.alGanar = null;
+
+// Esto debe estar después de los hints para el IDE
 (function generateChainProperties() {
     ['alIterar', 'alPerder', 'alGanar'].forEach(function (propertyName) {
         Estado.prototype[propertyName] = function (callback) {
@@ -23,12 +24,14 @@ Estado.prototype.next = function() {
     })
 })();
 
+//-----------------------------------------------------------------------
+// Esto debería estar en otro fichero
+//-----------------------------------------------------------------------
 
-
-
-function EstadoNormal(secuencia) {
-    this.indice = 0;
-    this.secuencia = secuencia;
+function EstadoNormal(secuencia,estadoErroneoAPasarCuandoSePierde) {
+    this._indice = 0;
+    this._secuencia = secuencia;
+    this._estadoAlPerder = estadoErroneoAPasarCuandoSePierde;
 }
 EstadoNormal.prototype = Object.create(Estado.prototype);
 EstadoNormal.prototype.constructor = EstadoNormal;
@@ -37,34 +40,71 @@ EstadoNormal.prototype.next = function (codigo) {
     var me = this;
 
     function elCodigoEsCorrecto(codigo) {
-        return codigo === me.secuencia[me.indice].item;
+        return codigo === me._secuencia[me._indice].item;
     }
     function haGanado() {
-        return me.indice >= me.secuencia.length
+        return me._indice >= me._secuencia.length
+    }
+
+    function llamarCallbackIterar(){
+        me._alIterar && me._alIterar(me._secuencia[me._indice].salida);
+    }
+
+    function llamarCallbackhaGanadoSiProcede(){
+        if(haGanado()) me._alGanar && me._alGanar();
+    }
+
+    function pasarAlEstadoPerdedor() {
+        me._estadoAlPerder && me._estadoAlPerder.next();
+        return me._estadoAlPerder;
+    }
+
+    function gestionaCodigoIncorrecto() {
+        function hayEstadoPerdedor() {
+            return me._estadoAlPerder;
+        }
+        function llamaCallbackLocal() {
+            me._alPerder();
+            return me;
+        }
+
+        if(hayEstadoPerdedor()) {
+            return pasarAlEstadoPerdedor();
+        } else {
+            return llamaCallbackLocal();
+        }
     }
 
     if(elCodigoEsCorrecto(codigo)) {
-        this._alIterar && this._alIterar(this.secuencia[this.indice].salida);
-        this.indice++;
-        if(haGanado()) this._alGanar && this._alGanar();
+        llamarCallbackIterar();
+        this._indice++;
+        llamarCallbackhaGanadoSiProcede();
         return this;
     } else {
-        var estadoErroneo = new EstadoErroneo().alPerder(this._alPerder);
-        estadoErroneo.next();
-        return estadoErroneo;
+        gestionaCodigoIncorrecto();
     }
 };
 
+//-----------------------------------------------------------------------
+// Esto debería estar en otro fichero
+//-----------------------------------------------------------------------
 
-
-// var randomNumberBetween0and19 = Math.floor(Math.random() * 20);
-function EstadoErroneo(){
+function EstadoPerdedor(min, max, generadorEstados){
+    this._clicksHastaPerder = Math.floor(Math.random() * this.max) + min;
+    this._clicks = 0;
 }
-EstadoErroneo.prototype = Object.create(Estado.prototype);
-EstadoErroneo.prototype.constructor = EstadoErroneo;
+EstadoPerdedor.prototype = Object.create(Estado.prototype);
+EstadoPerdedor.prototype.constructor = EstadoPerdedor;
 
-EstadoErroneo.prototype.next = function(){
-    this._alPerder && this._alPerder();
+EstadoPerdedor.prototype.next = function(){
+    var me = this;
+
+    function hayQueLanzarPerder() {
+        return me._clicks >= me._clicksHastaPerder;
+    }
+
+    this._clicks++;
+    if(hayQueLanzarPerder()) this._alPerder && this._alPerder();
     return this;
 };
 
