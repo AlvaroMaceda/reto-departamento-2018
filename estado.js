@@ -32,6 +32,7 @@ function EstadoCorrecto(secuencia, estadoErroneoAPasarCuandoSePierde) {
     this._indice = 0;
     this._secuencia = secuencia;
     this._estadoAlPerder = estadoErroneoAPasarCuandoSePierde;
+    this.TIPO = 'CORRECTO';
 }
 EstadoCorrecto.prototype = Object.create(Estado.prototype);
 EstadoCorrecto.prototype.constructor = EstadoCorrecto;
@@ -81,7 +82,7 @@ EstadoCorrecto.prototype.next = function (codigo) {
         llamarCallbackhaGanadoSiProcede();
         return this;
     } else {
-        gestionaCodigoIncorrecto();
+        return gestionaCodigoIncorrecto();
     }
 };
 
@@ -90,9 +91,10 @@ EstadoCorrecto.prototype.next = function (codigo) {
 //-----------------------------------------------------------------------
 
 function EstadoPerdedor(min, max, generadorEstados){
-    this._clicksHastaPerder = Math.floor(Math.random() * max) + min;
+    this._clicksHastaPerder = Math.floor(Math.random() * (max-min+1)) + min;
     this._clicks = 0;
     this._generadorEstados = generadorEstados;
+    this.TIPO = 'PERDEDOR';
 }
 EstadoPerdedor.prototype = Object.create(Estado.prototype);
 EstadoPerdedor.prototype.constructor = EstadoPerdedor;

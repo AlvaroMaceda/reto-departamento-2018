@@ -84,8 +84,9 @@ window.onload = function() {
                 next: function() {llamadas++}
             };
             var e = new EstadoCorrecto(secuencia, estadoPerdedor);
-            e.next('albondiga');
-            assert(llamadas === 1)
+            e = e.next('albondiga');
+            assert(llamadas === 1);
+            assert(e === estadoPerdedor);
         });
 
 

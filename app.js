@@ -18,9 +18,11 @@ function coloresAleatorios() {
     return [colores.randomElement(),colores.randomElement(),colores.randomElement()];
 }
 
-var estadoErroneo  = new EstadoPerdedor();
+var estadoPerdedor  = new EstadoPerdedor(3,7,coloresAleatorios)
+    .alIterar(ponerEstadoPantalla)
+    .alPerder(ponerPantallaEnEstadoPerdedor);
 
-var estado = new EstadoCorrecto(secuencia)
+var estado = new EstadoCorrecto(secuencia,estadoPerdedor)
     .alIterar(ponerEstadoPantalla)
     .alGanar(ponerPantallaEnEstadoGanador)
     .alPerder(ponerPantallaEnEstadoPerdedor);
@@ -30,7 +32,7 @@ function instalarManejadores() {
     function instalarManejadoresColores(){
         document.querySelectorAll('.boton-color').forEach(function(boton){
             boton.addEventListener("click", function(event){
-                estado = estado.next(event.target.dataset.color)
+                estado = estado.next(event.target.dataset.color);
             });
         });
     }
