@@ -9,30 +9,40 @@
 </head>
 <!-- Pen: https://codepen.io/maceda/pen/KQyRZo -->
 <body>
+
   <main>
 
-  <div id="buton-container">
-    <button class="boton" id="red" data-color="red"></button>
-    <button class="boton" id="blue" data-color="blue"></button>
-    <button class="boton" id="magenta" data-color="magenta"></button>
-    <button class="boton" id="green" data-color="green"></button>
-    <button class="boton" id="yellow" data-color="yellow"></button>
-  </div>
+      <div id="buton-container">
+        <button class="boton-color" id="red" data-color="red"></button>
+        <button class="boton-color" id="blue" data-color="blue"></button>
+        <button class="boton-color" id="magenta" data-color="magenta"></button>
+        <button class="boton-color" id="green" data-color="green"></button>
+        <button class="boton-color" id="yellow" data-color="yellow"></button>
+      </div>
 
-  <div id="container-estado">
-      <table>
-          <tr>
-              <th>1</th>
-              <th>2</th>
-              <th>3</th>
-          </tr>
-          <tr>
-              <td id="estado-1"></td>
-              <td id="estado-2"></td>
-              <td id="estado-3"></td>
-          </tr>
-      </table>
-  </div>
+      <div id="container-estado">
+          <table>
+              <tr>
+                  <th>1</th>
+                  <th>2</th>
+                  <th>3</th>
+              </tr>
+              <tr>
+                  <td id="estado-1"></td>
+                  <td id="estado-2"></td>
+                  <td id="estado-3"></td>
+              </tr>
+          </table>
+      </div>
+
+      <div id="ganar" style="display:none;">
+         <h1>El código es: <span id="codigo">CODIGO</span></h1>
+      </div>
+
+      <div id="perder" style="display:none;">
+          <h1>Código incorrecto</h1>
+          <button id="reintentar">Reintentar</button>
+      </div>
 
   </main>
 
